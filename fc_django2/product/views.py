@@ -5,6 +5,9 @@ from .models import Product
 from .forms import RegisterForm
 from order.forms import RegisterForm as OrderForm
 
+from django.utils.decorators import method_decorator
+from fcuser.decorators import admin_required
+
 
 class ProductList(ListView):
     model = Product
@@ -12,10 +15,21 @@ class ProductList(ListView):
     context_object_name = 'product_list'
 
 
+@method_decorator(admin_required, name='dispatch')
 class ProductCreate(FormView):
     template_name = 'register_product.html'
     form_class = RegisterForm
     success_url = '/product/'
+
+    def form_valid(self, form):
+        prodcut = Product(
+            name=form.data.get('name'),
+            price=form.data.get('price'),
+            description=form.data.get('description'),
+            stock=form.data.get('stock')
+        )
+        prodcut.save()
+        return super().form_valid(form)
 
 
 class ProductDetail(DetailView):
@@ -25,5 +39,5 @@ class ProductDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = OrderForm()
+        context['form'] = OrderForm(self.request)
         return context
