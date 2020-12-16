@@ -3,16 +3,21 @@
 {% block header %}
 <script>
 
-    function prodcut_detail(id) {
+    function product_detail(id) {
+        console.log("성공");
         $.ajax({
             url: "/api/product/" + id,
             success: function (result) {
                 $("#product-" + id).popover({
                     html: true,
-                    content: "테스트"
+                    content: result.name + "<br/>" + result.price
                 }).popover('show');
             }
         });
+    }
+     
+    function product_leave(id) {
+        $("#product-" + id).popover('hide');
     }
  
     $(document).ready(function () {
@@ -38,7 +43,8 @@
                 {% for product in product_list %}
                 <tr>
                     <th scope="row">{{ product.id }}</th>
-                    <th scope="row"><a id="product-{{ product.id }}" onmouseenter="prodcut_detail( {{ product.id }} );" href="/product/{{ product.id }}">{{ product.name }}</a></th>
+                    <th scope="row"><a id="product-{{ product.id }}" onmouseover="product_detail( {{ product.id }} );" onmouseout="product_leave( {{ product.id }} );"
+                         href="/product/{{ product.id }}">{{ product.name }}</a></th>
                     <th scope="row">{{ product.price |intcomma }}원</th>
                     <th scope="row">{{ product.register_date|date:'Y-m-d H:i' }}</th>
                 </tr>
