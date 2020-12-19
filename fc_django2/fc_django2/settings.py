@@ -30,7 +30,18 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+BATON = {
+    'SITE_HEADER': 'MINSUNG 백오피스',
+    'SITE_TITLE': 'MINSUNG 백오피스',
+    'INDEX_TITLE': 'MINSUNG 백오피스',
+    'SUPPORT_HREF': 'https://naver.com',
+    'COPYRIGHT': 'copyright © 2020 MINSUNG',
+    'POWERED_BY': '<a href="https://naver.com">Minsung</a>',
+    'SITE_HEADER': 'MINSUNG 백오피스',
+}
+
 INSTALLED_APPS = [
+    'baton',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,9 +50,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'rest_framework',
-    'fcuser',
-    'order',
-    'product'
+    'fcuser.apps.FcuserConfig',
+    'order.apps.OrderConfig',
+    'product.apps.ProductConfig',
+
+    'baton.autodiscover'
 ]
 
 MIDDLEWARE = [
@@ -108,9 +121,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 

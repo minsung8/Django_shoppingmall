@@ -1,0 +1,65 @@
+// scss-lint:disable ImportantRule IdSelector SelectorDepth NestingDepth PlaceholderInExtend
+body.login {
+  padding-top: 1px;
+
+  #header #branding {
+    margin: auto !important;
+  }
+}
+
+.login {
+  #content {
+    padding-top: 1px !important;
+  }
+
+  #content-main + br.clear {
+    display: none;
+  }
+
+  #container {
+    @extend .p-3;
+    max-width: 100%;
+    min-width: auto;
+
+    .navbar-toggler {
+      display: none !important;
+    }
+
+    .submit-row {
+      padding: 10px 0;
+      text-align: center;
+
+      input {
+        @extend .btn;
+        @extend .btn-secondary;
+        display: inline-block;
+      }
+    }
+
+    form {
+      padding: 1rem;
+
+      .input-group-text {
+        justify-content: center;
+        width: 42px;
+      }
+    }
+
+    input[type='text'],
+    input[type='password'] {
+      @extend .form-control;
+    }
+
+    .form-row {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    .errornote {
+      @extend .alert;
+      @extend .alert-warning;
+      margin: 1rem 1rem 0;
+      padding: .5rem;
+    }
+  }
+}
