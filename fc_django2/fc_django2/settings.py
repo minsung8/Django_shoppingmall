@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +38,43 @@ BATON = {
     'SUPPORT_HREF': 'https://naver.com',
     'COPYRIGHT': 'copyright © 2020 MINSUNG',
     'POWERED_BY': '<a href="https://naver.com">Minsung</a>',
-    'SITE_HEADER': 'MINSUNG 백오피스',
+    'MENU_TITLE': 'MINSUNG 백오피스',
+    'MENU': (
+        {'type': 'title', 'label': 'main', 'apps': (
+            'fcuser', 'order', 'product')},
+        {
+            'type': 'app',
+            'name': 'fcuser',
+            'label': '사용자',
+            'icon': 'fa fa-lock',
+            'models': (
+                {
+                    'name': 'fcuser',
+                    'label': '사용자'
+                },
+            )
+        },
+        {
+            'type': 'free', 'label': '주문', 'default_opne': True, 'children': [
+                {'type': 'model', 'label': '주문', 'name': 'order', 'app': 'order'},
+                {'type': 'free', 'label': '주문 날짜 뷰',
+                    'url': '/admin/order/order/date_view/'},
+            ]
+
+        },
+        {
+            'type': 'app',
+            'name': 'product',
+            'label': '상품',
+            'models': (
+                {
+                    'name': 'product',
+                    'label': '상품'
+                },
+            )
+        },
+        {'type': 'free', 'label': '메뉴얼', 'url': '/admin/manual'},
+    ),
 }
 
 INSTALLED_APPS = [
@@ -72,7 +109,9 @@ ROOT_URLCONF = 'fc_django2.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

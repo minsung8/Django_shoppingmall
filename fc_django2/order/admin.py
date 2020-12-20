@@ -1,10 +1,13 @@
+import datetime
 from django.contrib.admin.models import LogEntry, CHANGE
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import admin
+from django.template.response import TemplateResponse
 from django.db.models import F, Q
 from django.utils.html import format_html
 from django.db import transaction
 from .models import Order
+from django.urls import path
 
 
 def refund(modeladmin, request, queryset):
@@ -34,6 +37,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ('status', )
     list_display = ('fcuser', 'product', 'styled_status', 'action')
     change_list_template = 'admin/order_change_list.html'
+    change_form_template = 'admin/order_change_form.html'
 
     actions = [
         refund
@@ -87,7 +91,28 @@ class OrderAdmin(admin.ModelAdmin):
         order = Order.objects.get(pk=object_id)
         extra_context = {
             'title': f"'{order.fcuser.email}'의 '{order.product.name}' 주문 수정하기"}
+        extra_context['show_save_and_add_another'] = False
+        extra_context['show_save_and_continue'] = False
         return super().changeform_view(request, object_id, form_url, extra_context)
+
+    def get_urls(self):
+        urls = super().get_urls()
+
+        date_urls = [
+            path('date_view/', self.date_view),
+        ]
+        return date_urls + urls
+
+    def date_view(self, request):
+        week_date = datetime.datetime.now() - datetime.timedelta(days=7)
+        week_data = Order.objects.filter(register_date__gte=week_date)
+        data = Order.objects.filter(register_date__lt=week_date)
+        context = dict(
+            self.admin_site.each_context(request),
+            week_data=week_data,
+            data=data
+        )
+        return TemplateResponse(request, 'admin/order_date_view.html', context)
 
 
 admin.site.register(Order, OrderAdmin)
